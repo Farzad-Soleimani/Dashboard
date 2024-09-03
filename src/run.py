@@ -3,8 +3,10 @@ import pandas as pd
 from io import StringIO
 import json
 
+# Creating Title
 st.title(":notebook: Project dashboard")
 
+# Working with data base
 with st.expander("Statistics"):
     uploaded_file = st.file_uploader("Choose a file")
     if uploaded_file is not None:
