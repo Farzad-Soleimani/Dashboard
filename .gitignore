@@ -162,5 +162,7 @@ cython_debug/
 #.idea/
 
 # Custom gitignore
+
+
+migrations/
 data/
-data
