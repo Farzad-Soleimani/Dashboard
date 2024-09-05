@@ -7,7 +7,14 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 from PIL import Image
+import os
 
+import sys
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
+from db.models import Message
 # Sidebar
 login_option = st.sidebar.radio('Login/Sign up', ('Login','Sign up'))
 
@@ -32,7 +39,7 @@ else:
             pass
 
 # Banner
-banner = Image.open('./data/banner3.webp')
+banner = Image.open('/home/farzad_soleimani/practice_git/dashboard/banner3.webp')
 st.image(banner, caption="Sunrise by your soul", width = None)
 
 # Creating Title
@@ -73,3 +80,23 @@ with st.expander("User Profile"):
     col1.text_input("name:")
     col2.text_input("Location:")
     st.camera_input('Camera Input', key='camera_input')
+
+# Questions
+with st.expander('Q / A'):
+    query = st.text_input('Search:')
+
+    # select top 10 from messages
+    for msg in Message.objects.all().order_by('-date'):
+        if not msg.text or msg.text[-1] not in '؟?':
+            continue
+
+        if query and query not in msg.text:
+            continue
+
+        col1, col2 = st.columns([1, 4])
+        col1.write(f'**{msg.user.username}**')
+        col2.write(msg.text.replace(query, f'**{query}**'))
+
+    col1, col2 = st.columns(2)
+    col1.button('< Previous')
+    col2.button('Next >')
